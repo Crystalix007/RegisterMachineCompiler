@@ -50,7 +50,7 @@ L[[:digit:]]+ {
 	return token::INCREMENT;
 }
 
-"-" {
+-|− {
 	return token::DECREMENT;
 }
 
@@ -58,7 +58,7 @@ L[[:digit:]]+ {
 	return token::COMMA;
 }
 
-"\->" {
+\->|→ {
 	return token::ARROW;
 }
 

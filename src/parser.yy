@@ -35,6 +35,8 @@
 
 #	undef yylex
 #	define yylex scanner.yylex
+
+uint32_t labelIndex = 0;
 }
 
 %define api.value.type variant
@@ -61,6 +63,7 @@ INSTRUCTIONS
 	: %empty
 	| INSTRUCTIONS INSTRUCTION {
 		driver.addInstruction($2);
+		labelIndex++;
 	}
 	| INSTRUCTIONS INVALID_INPUT {
 		YYABORT;
@@ -70,15 +73,15 @@ INSTRUCTIONS
 INSTRUCTION
 	: HALT {
 		$$ = std::make_shared<BreakInstruction>();
-		std::cout << "BREAK ==> 0" << std::endl;
+		std::cout << labelIndex << ": " << "BREAK ==> 0" << std::endl;
 	}
 	| REGISTER INCREMENT ARROW LABEL {
 		$$ = std::make_shared<IncrementInstruction>($1, $4);
-		std::cout << "R" << $1 << "\u207a \u21a3 L" << $4 << " ==> " << $$->getEncoding() << std::endl;
+		std::cout << labelIndex << ": " << "R" << $1 << "\u207a \u21a3 L" << $4 << " ==> " << $$->getEncoding() << std::endl;
 	}
 	| REGISTER DECREMENT ARROW LABEL COMMA LABEL {
 		$$ = std::make_shared<DecrementInstruction>($1, $4, $6);
-		std::cout << "R" << $1 << "\u207b \u21a3 L" << $4 << ", L" << $6 << " ==> " << $$->getEncoding() << std::endl;
+		std::cout << labelIndex << ": " << "R" << $1 << "\u207b \u21a3 L" << $4 << ", L" << $6 << " ==> " << $$->getEncoding() << std::endl;
 	}
 	;
 
