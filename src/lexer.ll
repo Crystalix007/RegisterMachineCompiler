@@ -32,34 +32,22 @@ WORD [[:alnum:]]
 	yyval = lval;
 %}
 
-"HALT" {
-	return token::HALT;
+[[:digit:]]+ {
+	yyval->build<uint32_t>(std::stoull(yytext));
+	return token::NUMBER;
 }
 
-R[[:digit:]]+ {
-	yyval->build<uint32_t>(std::stoul(yytext + 1));
-	return token::REGISTER;
-}
 
-L[[:digit:]]+ {
-	yyval->build<uint32_t>(std::stoul(yytext + 1));
-	return token::LABEL;
-}
-
-"+" {
-	return token::INCREMENT;
-}
-
--|− {
-	return token::DECREMENT;
-}
-
-"\," {
+"," {
 	return token::COMMA;
 }
 
-\->|→ {
-	return token::ARROW;
+"[" {
+	return token::OPEN_LIST;
+}
+
+"]" {
+	return token::CLOSE_LIST;
 }
 
 {SPACE}+ {

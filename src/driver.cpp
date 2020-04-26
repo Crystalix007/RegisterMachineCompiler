@@ -51,21 +51,23 @@ void Grammar::Driver::parse_helper(std::istream& iss) {
 	return;
 }
 
-void Grammar::Driver::addInstruction(const std::shared_ptr<Instruction> instruction) {
-	instructions.push_back(instruction);
+void Grammar::Driver::addList(const std::vector<uint32_t> list) {
+	lists.push_back(list);
 }
 
-RegisterValue Grammar::Driver::getEncoding() const {
+RegisterValue Grammar::Driver::getListEncoding(std::vector<uint32_t> list) {
 	RegisterValue encoding = 0;
-	auto tempInstructions = instructions;
 
-	while (!tempInstructions.empty()) {
-		const auto instruction = tempInstructions.back();
-		tempInstructions.pop_back();
-		const auto instructionEncoding = instruction->getEncoding();
+	while (!list.empty()) {
+		const uint32_t listVal = list.back();
+		list.pop_back();
 
-		encoding = makeTuple(instruction->getEncoding(), encoding);
+		encoding = makeTuple(listVal, encoding);
 	}
 
 	return encoding;
+}
+
+std::vector<std::vector<uint32_t>> Grammar::Driver::getLists() const {
+	return lists;
 }

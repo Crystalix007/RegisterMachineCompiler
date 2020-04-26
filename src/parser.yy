@@ -35,8 +35,6 @@
 
 #	undef yylex
 #	define yylex scanner.yylex
-
-uint32_t labelIndex = 0;
 }
 
 %define api.value.type variant
@@ -44,44 +42,42 @@ uint32_t labelIndex = 0;
 %locations
 %define api.location.file none
 
-%token <uint32_t> REGISTER
-%token <uint32_t> LABEL
-%token            INCREMENT
-%token            DECREMENT
-%token            ARROW
+%token <uint32_t> NUMBER
+%token            OPEN_LIST
+%token            CLOSE_LIST
 %token            COMMA
-%token            HALT
 %token            INVALID_INPUT
 
-%type <std::shared_ptr<Instruction>> INSTRUCTION
+%type <std::vector<uint32_t>> LIST
+%type <std::vector<uint32_t>> NUMS
 
-%start INSTRUCTIONS
+%start LISTS
 
 %%
 
-INSTRUCTIONS
+LISTS
 	: %empty
-	| INSTRUCTIONS INSTRUCTION {
-		driver.addInstruction($2);
-		labelIndex++;
-	}
-	| INSTRUCTIONS INVALID_INPUT {
-		YYABORT;
+	| LISTS LIST {
+		driver.addList($2);
 	}
 	;
 
-INSTRUCTION
-	: HALT {
-		$$ = std::make_shared<BreakInstruction>();
-		std::cout << labelIndex << ": " << "BREAK ==> 0" << std::endl;
+LIST
+	: OPEN_LIST CLOSE_LIST {
+		$$ = {};
 	}
-	| REGISTER INCREMENT ARROW LABEL {
-		$$ = std::make_shared<IncrementInstruction>($1, $4);
-		std::cout << labelIndex << ": " << "R" << $1 << "\u207a \u21a3 L" << $4 << " ==> " << $$->getEncoding() << std::endl;
+	| OPEN_LIST NUMS CLOSE_LIST {
+		$$ = $2;
 	}
-	| REGISTER DECREMENT ARROW LABEL COMMA LABEL {
-		$$ = std::make_shared<DecrementInstruction>($1, $4, $6);
-		std::cout << labelIndex << ": " << "R" << $1 << "\u207b \u21a3 L" << $4 << ", L" << $6 << " ==> " << $$->getEncoding() << std::endl;
+	;
+
+NUMS
+	: NUMBER {
+		$$ = { $1 };
+	}
+	| NUMBER COMMA NUMS {
+		$$ = $3;
+		$$.push_back($1);
 	}
 	;
 

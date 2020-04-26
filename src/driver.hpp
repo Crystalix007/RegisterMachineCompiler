@@ -21,9 +21,10 @@ namespace Grammar {
 		 * functions to store data retrieved by grammar / parser
 		 */
 
-		void addInstruction(const std::shared_ptr<Instruction> instruction);
+		void addList(const std::vector<uint32_t> list);
+		static RegisterValue getListEncoding(std::vector<uint32_t> list);
 
-		RegisterValue getEncoding() const;
+		std::vector<std::vector<uint32_t>> getLists() const;
 
 	private:
 		void parse_helper(std::istream& iss);
@@ -35,6 +36,6 @@ namespace Grammar {
 		 * specialised data store
 		 */
 
-		std::vector<std::shared_ptr<Instruction>> instructions;
+		std::vector<std::vector<uint32_t>> lists;
 	};
 } // namespace Grammar
