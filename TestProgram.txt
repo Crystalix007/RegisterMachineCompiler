@@ -1,0 +1,6 @@
+R1- → L2 , L1
+HALT
+R1- → L3 , L4
+R1- → L5 , L4
+HALT
+R0 + → L0

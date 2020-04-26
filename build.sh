@@ -1,0 +1,10 @@
+#! /bin/sh -e
+bison -b "generated/parser" "src/parser.yy"
+flex -o "generated/lexer.yy.cc" "src/lexer.ll"
+g++  -pedantic -std=c++17 -Wall -I "src" -I "generated" -c "generated/lexer.yy.cc" -o "build/lexer.yy.o"
+g++  -pedantic -std=c++17 -Wall -I "src" -I "generated" -c "generated/parser.tab.cc" -o "build/parser.tab.o"
+g++  -pedantic -std=c++17 -Wall -I "src" -I "generated" -c "src/driver.cpp" -o "build/driver.o"
+g++  -pedantic -std=c++17 -Wall -I "src" -I "generated" -c "src/instruction.cpp" -o "build/instruction.o"
+g++  -pedantic -std=c++17 -Wall -I "src" -I "generated" -c "src/main.cpp" -o "build/main.o"
+g++  -pedantic -std=c++17 -Wall -I "src" -I "generated" -c "src/types.cpp" -o "build/types.o"
+g++ build/driver.o build/instruction.o build/lexer.yy.o build/main.o build/parser.tab.o build/types.o  -lgmp -lgmpxx  -o "RegisterMachineCompiler"
