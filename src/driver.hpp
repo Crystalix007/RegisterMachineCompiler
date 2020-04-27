@@ -21,7 +21,7 @@ namespace Grammar {
 		 * functions to store data retrieved by grammar / parser
 		 */
 
-		void addList(const std::vector<uint32_t> list);
+		void addList(std::vector<uint32_t> list);
 		static RegisterValue getListEncoding(std::vector<uint32_t> list);
 
 		std::vector<std::vector<uint32_t>> getLists() const;

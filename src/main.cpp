@@ -12,7 +12,7 @@ int main() {
 	const auto lists = driver.getLists();
 
 	for (const auto& list : lists) {
-		for (uint32_t i = 0; i < list.size(); i++) {
+		for (uint32_t i = 0; i <= list.size(); i++) {
 			std::vector<uint32_t> subVec{ list.end() - i, list.end() };
 
 			std::cout << subVec << ": " << driver.getListEncoding(subVec) << std::endl;

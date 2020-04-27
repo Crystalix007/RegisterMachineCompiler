@@ -51,7 +51,8 @@ void Grammar::Driver::parse_helper(std::istream& iss) {
 	return;
 }
 
-void Grammar::Driver::addList(const std::vector<uint32_t> list) {
+void Grammar::Driver::addList(std::vector<uint32_t> list) {
+	std::reverse(list.begin(), list.end());
 	lists.push_back(list);
 }
 
